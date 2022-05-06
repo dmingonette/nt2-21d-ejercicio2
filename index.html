@@ -17,7 +17,13 @@
     <input type="text" class="form-control" v-model="criterioDeBusqueda"
         placeholder="Ingresar un criterio de busqueda...">
     <br>
-    <div class="card-deck m-0">
+    <input type="text" class="form-control" v-model="criterioDeBusquedaNombre"
+        placeholder="Ingrese el nombre a buscar">
+    <br>
+    <input type="text" class="form-control" v-model="criterioDeBusquedaDni"
+        placeholder="Ingrese el numero de dni a buscar">
+    <br>
+    <div class="card-deck m-0" v-if="validacionDatos()">
         <div class="row">
             <div class="col" v-for="persona in personasFiltradas">
                 <div class="card mb-3">
@@ -30,6 +36,9 @@
             </div>
         </div>
     </div>
+    <div v-else>
+        <p class="alert alert-warning">Debe ingresar al menos tres (3) caracteres</p>
+    </div>
 
 </div>
 
@@ -40,6 +49,9 @@
         el: '#app',
         data: {
             criterioDeBusqueda: '',
+            criterioDeBusquedaNombre: '',
+            criterioDeBusquedaDni: '',
+
             //Aquí, en este array es donde tienen que agregar su información
             personas: [
                 {
@@ -49,10 +61,34 @@
                     dni: "20442873"
                 },
                 {
-                    nombre: "...",
-                    apellido: "...",
-                    correo: "...",
-                    dni: "..."
+                    nombre: "Daniel",
+                    apellido: "Perez",
+                    correo: "danielsanchez68@hotmail.com",
+                    dni: "20442873"
+                },
+                {
+                    nombre: "Daniel",
+                    apellido: "Gomez",
+                    correo: "danielsanchez68@hotmail.com",
+                    dni: "20442873"
+                },
+                {
+                    nombre: "Diego",
+                    apellido: "Mingonette",
+                    correo: "diegomingonette90@gmail.com",
+                    dni: "35321456"
+                },
+                {
+                    nombre: "Marcos",
+                    apellido: "Pernica",
+                    correo: "mp1992@gmail.com",
+                    dni: "37886452"
+                },
+                {
+                    nombre: "Valentina",
+                    apellido: "Zarate",
+                    correo: "valen_95@gmail.com",
+                    dni: "39562458"
                 },
             ]
 
@@ -61,14 +97,26 @@
             personasFiltradas() {
                 return this.personas.filter((persona) => {
                     let registroCompleto = `${persona.nombre} ${persona.apellido} ${persona.dni} ${persona.correo}`
-                    return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase())
+                    return registroCompleto.toLowerCase().includes(this.criterioDeBusqueda.toLowerCase()) && 
+                    `${persona.nombre} ${persona.apellido}`.toLocaleLowerCase().includes(this.criterioDeBusquedaNombre) &&
+                    `${persona.dni}`.includes(this.criterioDeBusquedaDni)
                 });
             }
         },
         methods: {
             getNombreCompleto(persona) {
                 return `${persona.nombre} ${persona.apellido}`
-            }
+            },
+            validacionDatos(){
+                
+                let esValido = false
+                
+                if(this.criterioDeBusqueda.length >=3 || this.criterioDeBusquedaDni.length >= 3 || this.criterioDeBusquedaNombre.length >= 3){
+                    esValido=true
+                }
+
+                return esValido
+            }  
         }
     });
 </script>
